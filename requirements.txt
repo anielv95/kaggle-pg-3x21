@@ -1,3 +1,10 @@
 pandas
 scikit-learn
 kaggle
+matplotlib
+
+pytest
+click
+pylint
+pytest-cov
+black
