@@ -1,3 +1,5 @@
+"""Module providingFunction printing python version."""
+
 import pandas as pd
 
 # import zipfile
@@ -87,17 +89,17 @@ def evaluation():
 
     y_train = strat_train_set.pop("target")  # train is your submission!
 
-    rf = RandomForestRegressor(
+    rforest = RandomForestRegressor(
         n_estimators=1000, max_depth=7, n_jobs=-1, random_state=42
     )
-    rf.fit(strat_train_set, y_train)
+    rforest.fit(strat_train_set, y_train)
 
-    y_hat = rf.predict(strat_test_set)
+    y_hat = rforest.predict(strat_test_set)
 
     test_error = mean_squared_error(y_true=y_test, y_pred=y_hat, squared=False)
     print(test_error)
 
-    y_hat = rf.predict(strat_train_set)
+    y_hat = rforest.predict(strat_train_set)
     train_error = mean_squared_error(y_true=y_train, y_pred=y_hat, squared=False)
 
     print(train_error)
