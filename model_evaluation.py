@@ -109,6 +109,9 @@ def getting_relevant_features(file="candidate1.csv"):
     print(feature_importance_dict)
     return feature_importance_dict
 
+def deleting_column_list(list_columns=["id","NH4_7"]):
+    """deleting a column list"""
+
 
         
 if __name__=="__main__":

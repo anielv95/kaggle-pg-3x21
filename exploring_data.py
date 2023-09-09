@@ -43,11 +43,11 @@ def evaluation():
     IMAGES_PATH = Path() / "images" / "end_to_end_project"
     IMAGES_PATH.mkdir(parents=True, exist_ok=True)
 
-    def save_fig(fig_id, tight_layout=True, fig_extension="png", resolution=300):
-        path = IMAGES_PATH / f"{fig_id}.{fig_extension}"
-        if tight_layout:
-            plt.tight_layout()
-        plt.savefig(path, format=fig_extension, dpi=resolution)
+   # def save_fig(fig_id, tight_layout=True, fig_extension="png", resolution=300):
+    #    path = IMAGES_PATH / f"{fig_id}.{fig_extension}"
+     #   if tight_layout:
+      #      plt.tight_layout()
+       # plt.savefig(path, format=fig_extension, dpi=resolution)
 
     # extra code – the next 5 lines define the default font sizes
     plt.rc("font", size=14)
@@ -146,18 +146,18 @@ def evaluation():
         strat_train_set.columns,
     )
 
-    """strat_train_set["target"] = y_train
+    #strat_train_set["target"] = y_train
 
-    strat_train_set.plot(kind="scatter", x="O2_1", y="target", grid=True, alpha=0.2)
-    save_fig("scattero21")  # extra code
-    plt.show()
+    #strat_train_set.plot(kind="scatter", x="O2_1", y="target", grid=True, alpha=0.2)
+    #save_fig("scattero21")  # extra code
+    #plt.show()
 
-    strat_train_set.plot(kind="scatter", x="O2_2", y="target", grid=True, alpha=0.2)
-    save_fig("scattero22")  # extra code
-    plt.show()
+    #strat_train_set.plot(kind="scatter", x="O2_2", y="target", grid=True, alpha=0.2)
+    #save_fig("scattero22")  # extra code
+    #plt.show()
 
 
-    strat_train_set[['O2_1','O2_2']].hist(bins=50, figsize=(12, 8))
-    save_fig("attribute_histogram_plots")  # extra code
-    plt.show()"""
+    #strat_train_set[['O2_1','O2_2']].hist(bins=50, figsize=(12, 8))
+    #save_fig("attribute_histogram_plots")  # extra code
+    #plt.show()
     return train_error, test_error
