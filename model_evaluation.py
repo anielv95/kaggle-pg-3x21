@@ -8,7 +8,6 @@ import numpy as np
 from sklearn.model_selection import train_test_split
 import json
 
-
 def listing_files(relative_path="."):
     """this function returns a file list from relative_path
 
@@ -20,7 +19,6 @@ def listing_files(relative_path="."):
     """
     file_list = os.listdir(relative_path)
     return file_list
-
 
 def model_evaluation():
     file_list = listing_files("data")
@@ -41,7 +39,7 @@ def model_evaluation():
     y_test = strat_test_set.pop("target")
     results = {}
     for local_file in file_list:
-        if ".csv" == local_file[-4:]:
+        if ".csv"==local_file[-4:]:
             print(local_file)
             train = pd.read_csv(f"data/{local_file}")
             y_train = train.pop("target")
@@ -53,64 +51,66 @@ def model_evaluation():
 
             y_hat = rforest.predict(train)
 
-            train_error = mean_squared_error(
-                y_true=y_train, y_pred=y_hat, squared=False
-            )
-            if train.shape[0] < 3348:
+            train_error = mean_squared_error(y_true=y_train, y_pred=y_hat, squared=False)
+            if train.shape[0]<3348:
+
                 y_hat = rforest.predict(strat_test_set)
 
-                test_error = mean_squared_error(
-                    y_true=y_test, y_pred=y_hat, squared=False
-                )
-                print(
-                    "train:",
-                    train_error,
-                    train.shape,
-                    "\n",
-                    "test:",
-                    test_error,
-                    strat_test_set.shape,
-                    "\n\n",
-                )
-
-                results[local_file] = {
-                    "train": {"error": train_error, "shape": train.shape},
-                    "test": {"error": test_error, "shape": strat_test_set.shape},
-                }
+                test_error = mean_squared_error(y_true=y_test, y_pred=y_hat, squared=False)
+                print("train:",train_error,train.shape,"\n","test:",test_error,strat_test_set.shape,"\n\n")
+                
+                results[local_file] = {"train":{"error":train_error,"shape":train.shape},
+                                       "test":{"error":test_error,"shape":strat_test_set.shape}}
 
             else:
-                print("train:", train_error, train.shape, "\n\n")
-                results[local_file] = {
-                    "train": {"error": train_error, "shape": train.shape},
-                    "test": {},
-                }
-
+                print("train:",train_error,train.shape,"\n\n")
+                results[local_file] = {"train":{"error":train_error,"shape":train.shape},
+                                       "test":{}}
+                
     # Serializing json
     json_object = json.dumps(results, indent=4)
     with open("data/results.json", "w") as outfile:
         outfile.write(json_object)
     return True
 
-
 def reading_json_file(relative_path="."):
     f = open(relative_path)
     data = json.load(f)
     return data
 
-
 def best_score():
-    relative_path = "data/results.json"
+    relative_path = 'data/results.json'
     results = reading_json_file(relative_path)
     min_val = 100.0
     winning_file = ""
     for file in results:
-        if results[file]["test"] == {}:
+        if results[file]["test"]=={}:
             continue
-        if min_val > results[file]["test"]["error"]:
+        if min_val>results[file]["test"]["error"]:
             min_val = results[file]["test"]["error"]
             winning_file = file
-    return {winning_file: min_val}
+    return {winning_file:min_val}
 
 
-if __name__ == "__main__":
+def getting_relevant_features(file="candidate1.csv"):
+    """Getting relevant features"""
+    train = pd.read_csv(f"data/{file}")
+    y_train = train.pop("target")
+
+    rforest = RandomForestRegressor(
+        n_estimators=1000, max_depth=7, n_jobs=-1, random_state=42
+    )
+    rforest.fit(train, y_train)
+    feature_importance_values = rforest.feature_importances_
+    features = np.array(train.columns)
+    feature_importance_dict = {}
+    for feature_ith,feature_ith_value in zip(features,feature_importance_values):
+        feature_importance_dict[feature_ith] = feature_ith_value
+    return feature_importance_dict
+
+
+        
+if __name__=="__main__":
     model_evaluation()
+
+    

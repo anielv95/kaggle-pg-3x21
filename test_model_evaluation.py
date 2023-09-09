@@ -24,3 +24,8 @@ def test_best_score():
     assert type({}) == type(results)
     assert results["candidate1.csv"] >= 0.0
     assert results["candidate1.csv"] <= 1.5
+
+def test_getting_relevant_features():
+    """function to test getting_relevant_features"""
+    features_dict = me.getting_relevant_features()
+    assert len(features_dict)==36
