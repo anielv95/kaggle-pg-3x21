@@ -84,16 +84,16 @@ def evaluation():
     strat_test_set.drop("target_cat", axis=1, inplace=True)
     strat_train_set.drop("target_cat", axis=1, inplace=True)
 
-    #for col in strat_train_set.columns:
-     #   if col not in ["target",'O2_1','O2_2']:
-      #      strat_train_set[col] = 1.0
-    
+    # for col in strat_train_set.columns:
+    #   if col not in ["target",'O2_1','O2_2']:
+    #      strat_train_set[col] = 1.0
+
     strat_train_set["id"] = 1.0
 
-    #strat_train_set = strat_train_set[["target",'O2_1','O2_2']].copy()
-    #strat_test_set = strat_test_set[["target",'O2_1','O2_2']].copy()
-    #strat_train_set = strat_train_set[strat_train_set["O2_1"]<=20.0].copy()
-    #strat_train_set = strat_train_set[strat_train_set["O2_2"]<=30.0].copy()
+    # strat_train_set = strat_train_set[["target",'O2_1','O2_2']].copy()
+    # strat_test_set = strat_test_set[["target",'O2_1','O2_2']].copy()
+    # strat_train_set = strat_train_set[strat_train_set["O2_1"]<=20.0].copy()
+    # strat_train_set = strat_train_set[strat_train_set["O2_2"]<=30.0].copy()
 
     candidate = strat_train_set.copy()
 
@@ -121,25 +121,30 @@ def evaluation():
 
     # shape = train.shape
 
-    #strat_train_set, strat_test_set = train_test_split(
-     #   train, test_size=0.3, stratify=train["target_cat"], random_state=42
-    #)
+    # strat_train_set, strat_test_set = train_test_split(
+    #   train, test_size=0.3, stratify=train["target_cat"], random_state=42
+    # )
 
-    #strat_test_set.drop("target_cat", axis=1, inplace=True)
-    #strat_train_set.drop("target_cat", axis=1, inplace=True)
+    # strat_test_set.drop("target_cat", axis=1, inplace=True)
+    # strat_train_set.drop("target_cat", axis=1, inplace=True)
 
-    #train = train[train["O2_1"]<=20.0].copy()
-    #train = train[train["O2_2"]<=30.0].copy()
+    # train = train[train["O2_1"]<=20.0].copy()
+    # train = train[train["O2_2"]<=30.0].copy()
 
-    #for col in train.columns:
+    # for col in train.columns:
     #    if col not in ["target",'O2_1','O2_2']:
-     #       train[col] = 1.0
+    #       train[col] = 1.0
 
-    #train.drop("target_cat", axis=1, inplace=True)
+    # train.drop("target_cat", axis=1, inplace=True)
     candidate.to_csv(
-      "/gh/kaggle-pg-3x21/kaggle-pg-3x21/data/candidate1.csv", index=False
+        "/gh/kaggle-pg-3x21/kaggle-pg-3x21/data/candidate1.csv", index=False
     )
-    print(rforest.feature_importances_, strat_train_set.shape, "\n", strat_train_set.columns)
+    print(
+        rforest.feature_importances_,
+        strat_train_set.shape,
+        "\n",
+        strat_train_set.columns,
+    )
 
     """strat_train_set["target"] = y_train
 
