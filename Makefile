@@ -10,3 +10,6 @@ format:
 
 test:
 	python -m pytest -vv -s --cov=exploring_data test_exploring_data.py
+
+test2:
+	python -m pytest -vv -s --cov=model_evaluation test_model_evaluation.py
