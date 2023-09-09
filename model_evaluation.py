@@ -102,15 +102,16 @@ def getting_relevant_features(file="candidate1.csv"):
     )
     rforest.fit(train, y_train)
     feature_importance_values = rforest.feature_importances_
+    sorted_value_index = np.argsort(feature_importance_values)
     features = np.array(train.columns)
     feature_importance_dict = {}
-    for feature_ith,feature_ith_value in zip(features,feature_importance_values):
-        feature_importance_dict[feature_ith] = feature_ith_value
+    feature_importance_dict = {features[i]: feature_importance_values[i] for i in sorted_value_index}
+    print(feature_importance_dict)
     return feature_importance_dict
 
 
         
 if __name__=="__main__":
-    model_evaluation()
+    getting_relevant_features()
 
     
