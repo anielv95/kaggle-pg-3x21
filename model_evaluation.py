@@ -209,10 +209,22 @@ def preparing_data():
 
 
 def main():
-    column_list = ["id",""]
+    column_list = ["id","NH4_7"]
+    feature_importance_path = "data/feature_importance.json"
+    feature_importance_dict = reading_json_file(feature_importance_path)
+    min_val = 1.088901992209112
+    for col in feature_importance_dict:
+        if col not in column_list:
+            column_list.append(col)
+            errors = deleting_column_list(column_list)
+            if errors[1]<min_val:
+                print("improvement:",col)
+    return True
+
+    
 
         
 if __name__=="__main__":
-    getting_relevant_features()
+    main()
 
     

@@ -43,3 +43,8 @@ def test_writing_json_file():
     boolean_value = me.writing_json_file(target,relative_path)
     dict_ = me.reading_json_file(relative_path)
     assert target == dict_
+
+def test_deleting_column_list():
+    """function to test deleting column list"""
+    errors = me.deleting_column_list()
+    assert errors[0]>0 and errors[1]>0
