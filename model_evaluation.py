@@ -78,6 +78,12 @@ def reading_json_file(relative_path="."):
     data = json.load(f)
     return data
 
+def writing_json_file(dictionary, relative_path="."):
+    json_object = json.dumps(dictionary, indent=4)
+    with open(relative_path, "w") as outfile:
+        outfile.write(json_object)
+    return True
+
 def best_score():
     relative_path = 'data/results.json'
     results = reading_json_file(relative_path)
@@ -111,7 +117,77 @@ def getting_relevant_features(file="candidate1.csv"):
 
 def deleting_column_list(list_columns=["id","NH4_7"]):
     """deleting a column list"""
+    train,test = preparing_data()
+    for col in train.columns:
+        if col in list_columns:
+            train[col] = 1.0
+    candidate = train.copy()
+    ###
+    y_test = test.pop("target")
 
+    y_train = train.pop("target")  
+
+    rforest = RandomForestRegressor(
+        n_estimators=1000, max_depth=7, n_jobs=-1, random_state=42
+    )
+    rforest.fit(train, y_train)
+
+    y_hat = rforest.predict(test)
+    test_error = mean_squared_error(y_true=y_test, y_pred=y_hat, squared=False)
+    print("test error:",test_error)
+
+    y_hat = rforest.predict(train)
+    train_error = mean_squared_error(y_true=y_train, y_pred=y_hat, squared=False)
+    print("train error:",train_error)
+
+    #reading ids:
+    ids_path = "data/ids.json"
+    try:
+        dict_id = reading_json_file(relative_path=ids_path)
+    except Exception as e: 
+        print(e)
+        dict_id = {"id":2}
+    id = dict_id["id"]
+    dict_id["id"] = id+1
+    writing_json_file(dict_id,ids_path)
+    file_name = f"candidate{id}"
+    candidate.to_csv(
+        f"data/{file_name}.csv", index=False
+    )
+
+    nomenclature_path = "data/nomenclature.json"
+    try:
+        nomenclature_dict = reading_json_file(relative_path=nomenclature_path)
+        nomenclature_dict[id] = {"cols_dropped":list_columns}
+    except Exception as e: 
+        print(e)
+        nomenclature_dict = {id:{"cols_dropped":list_columns}}
+    writing_json_file(nomenclature_dict,nomenclature_path)
+
+    results_path = "data/results.json"
+    reading_json_file(relative_path=nomenclature_path)
+
+    return True
+
+
+def preparing_data():
+    """function to prepare data and starting with experiment and testing"""
+
+    train = pd.read_csv("/gh/kaggle-pg-3x21/kaggle-pg-3x21/data/sample.csv")
+    train["target_cat"] = pd.cut(
+        train["target"],
+        bins=[0.0, 4.0, 8.0, 12.0, 16.0, np.inf],
+        labels=[1, 2, 3, 4, 5],
+    )
+
+    strat_train_set, strat_test_set = train_test_split(
+        train, test_size=0.3, stratify=train["target_cat"], random_state=42
+    )
+
+    strat_test_set.drop("target_cat", axis=1, inplace=True)
+    strat_train_set.drop("target_cat", axis=1, inplace=True)
+
+    return strat_train_set,strat_test_set
 
         
 if __name__=="__main__":

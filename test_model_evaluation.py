@@ -29,3 +29,17 @@ def test_getting_relevant_features():
     """function to test getting_relevant_features"""
     features_dict = me.getting_relevant_features()
     assert len(features_dict)==36
+
+def test_preparing_data():
+    """function to test preparing_data"""
+    train,test = me.preparing_data()
+    assert train.shape[1]==37
+    assert test.shape[1]==37
+
+def test_writing_json_file():
+    """function to test writing_json_file function"""
+    relative_path = "data/testing_writing_json.json"
+    target = {"key":"value"}
+    boolean_value = me.writing_json_file(target,relative_path)
+    dict_ = me.reading_json_file(relative_path)
+    assert target == dict_
