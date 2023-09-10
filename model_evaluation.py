@@ -165,9 +165,27 @@ def deleting_column_list(list_columns=["id","NH4_7"]):
     writing_json_file(nomenclature_dict,nomenclature_path)
 
     results_path = "data/results.json"
-    reading_json_file(relative_path=nomenclature_path)
+    results = reading_json_file(relative_path=results_path)
 
-    return True
+    results[file_name] = {"train":{"error":train_error,"shape":train.shape},
+                            "test":{"error":test_error,"shape":test.shape}}
+    
+    writing_json_file(results,results_path)
+
+    feature_importance_values = rforest.feature_importances_
+    sorted_value_index = np.argsort(feature_importance_values)
+    features = np.array(train.columns)
+    feature_importance_dict = {}
+    feature_importance_dict = {features[i]: feature_importance_values[i] for i in sorted_value_index}
+
+    print(
+        feature_importance_dict
+    )
+
+    feature_importance_path = "data/feature_importance.json"
+    writing_json_file(feature_importance_dict,feature_importance_path)
+
+    return train_error,test_error
 
 
 def preparing_data():
@@ -188,6 +206,10 @@ def preparing_data():
     strat_train_set.drop("target_cat", axis=1, inplace=True)
 
     return strat_train_set,strat_test_set
+
+
+def main():
+    column_list = ["id",""]
 
         
 if __name__=="__main__":
