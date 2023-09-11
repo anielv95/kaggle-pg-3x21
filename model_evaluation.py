@@ -218,13 +218,36 @@ def main():
             column_list.append(col)
             errors = deleting_column_list(column_list)
             if errors[1]<min_val:
+                min_val = errors[1]
                 print("improvement:",col)
-    return True
+    return min_val, col
 
-    
+
+def testing_candidate_data(train_ext,test_ext):
+    train = train_ext.copy()
+    test = test_ext.copy()
+    y_train = train.pop("target")  
+    y_test = test.pop("target")
+
+    rforest = RandomForestRegressor(
+        n_estimators=1000, max_depth=7, n_jobs=-1, random_state=42
+    )
+    rforest.fit(train, y_train)
+
+    y_hat = rforest.predict(test)
+    test_error = mean_squared_error(y_true=y_test, y_pred=y_hat, squared=False)
+    print("test error:",test_error)
+
+    y_hat = rforest.predict(train)
+    train_error = mean_squared_error(y_true=y_train, y_pred=y_hat, squared=False)
+    print("train error:",train_error)
+
+
+    return train_error,test_error, rforest.feature_importances_
 
         
 if __name__=="__main__":
-    main()
+    min_val,col = main()
+    print("/n/n",min_val,col)
 
     
